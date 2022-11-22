@@ -10,7 +10,13 @@ export default function AppNavigation() {
     <Navigator>
       <Screen name="Login" component={Login} />
       <Screen name="Signup" component={Signup} />
-      <Screen name="HomeNavigation" component={HomeNavigator} />
+      <Screen
+        options={{
+          headerShown: false,
+        }}
+        name="HomeNavigation"
+        component={HomeNavigator}
+      />
     </Navigator>
   );
 }
