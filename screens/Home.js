@@ -6,24 +6,66 @@ import axios from "axios";
 export default function Home() {
   const [selectedRoute, setSelectedRoute] = useState();
   const [selectedDestination, setSelectedDestination] = useState();
+  console.log("Selected Destination", selectedDestination);
+  const [routes, setRoutes] = useState([]);
+  const [destinations, setDestinations] = useState([]);
 
   const getBusRoutes = async () => {
     try {
       const response = await axios({
         method: "GET",
-        url: "http://localhost:8000/api/routes/",
+        url: "https://busticketbooking.onrender.com/api/routes/",
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log("response", response);
+      setRoutes(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const getDestinations = async () => {
+    try {
+      const response = await axios({
+        method: "GET",
+        url: "https://busticketbooking.onrender.com/api/routes/busStations",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response.data);
+      setDestinations(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSearchBus = () => {
+    console.log(selectedRoute, selectedDestination);
+    axios({
+      method: "GET",
+      url: "https://busticketbooking.onrender.com/api/buses/busBasedOnRouteAndDestination",
+      data: {
+        routeId: selectedRoute,
+        destinationStationId: selectedDestination,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        accept: "application/json",
+      },
+    })
+      .then((response) => {
+        console.log(response, "SEarch BUses");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     getBusRoutes();
+    getDestinations();
   }, []);
 
   return (
@@ -48,10 +90,17 @@ export default function Home() {
       >
         <Picker
           selectedValue={selectedRoute}
-          onValueChange={(itemValue, itemIndex) => setSelectedRoute(itemValue)}
+          onValueChange={(itemValue) => setSelectedRoute(itemValue)}
         >
-          <Picker.Item label="Nyanza - Downtown" value="java" />
-          <Picker.Item label="Nyanza - Nyabugogo" value="js" />
+          {routes.map((item) => {
+            return (
+              <Picker.Item
+                key={item._id}
+                label={`${item.routeNumber} ${item.busStation1} - ${item.busStation2}`}
+                value={item._id}
+              />
+            );
+          })}
         </Picker>
       </View>
       <Text
@@ -78,9 +127,15 @@ export default function Home() {
             setSelectedDestination(itemValue)
           }
         >
-          <Picker.Item label="Nyanza" value="java" />
-          <Picker.Item label="Downtown" value="js" />
-          <Picker.Item label="Nyabugogo" value="js" />
+          {destinations.map((item) => {
+            return (
+              <Picker.Item
+                key={item._id}
+                label={`${item.name}`}
+                value={item._id}
+              />
+            );
+          })}
         </Picker>
       </View>
       <View
@@ -91,7 +146,7 @@ export default function Home() {
           backgroundColor: "blue",
         }}
       >
-        <Button title="Search for bus" />
+        <Button title="Search for bus" onPress={handleSearchBus} />
       </View>
     </View>
   );

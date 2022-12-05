@@ -1,6 +1,7 @@
 import { View, Text, TextInput, Button } from "react-native";
 import axios from "axios";
 import { useState } from "react";
+import { setItemAsync } from "expo-secure-store";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
@@ -8,22 +9,27 @@ export default function Login({ navigation }) {
   const handleLogin = async () => {
     console.log("email", email);
     console.log("password", password);
-    try {
-      const response = await axios({
-        method: "post",
-        url: "http://localhost:8000/api/auth/login",
-        data: {
-          email: email,
-          password: password,
-        },
-        headers: {
-          "Content-Type": "application/json",
-        },
+    axios({
+      method: "post",
+      url: "https://busticketbooking.onrender.com/api/auth/login",
+      data: {
+        email: email.toLowerCase(),
+        password: password,
+      },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        setItemAsync("token", response.data.token);
+        console.log("response", response.data);
+      })
+      .then(() => {
+        navigation.navigate("HomeNavigation");
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      console.log("response", response.data);
-    } catch (error) {
-      console.log(error.message);
-    }
   };
 
   return (
@@ -50,6 +56,7 @@ export default function Login({ navigation }) {
             marginVertical: 10,
             paddingLeft: 10,
           }}
+          keyboardType="email-address"
           onChangeText={(text) => setEmail(text)}
           placeholder="Enter your email"
         />
@@ -69,6 +76,7 @@ export default function Login({ navigation }) {
             marginVertical: 10,
             paddingLeft: 10,
           }}
+          secureTextEntry={true}
           onChangeText={(text) => setPassword(text)}
           placeholder="Enter your password"
         />
