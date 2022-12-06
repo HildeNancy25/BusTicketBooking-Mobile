@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Login from "../screens/Login";
 import Signup from "../screens/Signup";
 import HomeNavigator from "./homeNavigation";
+import PaymentScreen from "../screens/PaymentScreen";
 import { useNavigation } from "@react-navigation/native";
 import { getItemAsync } from "expo-secure-store";
 import { useEffect } from "react";
@@ -9,8 +10,6 @@ import { useEffect } from "react";
 const { Navigator, Screen } = createStackNavigator();
 
 export default function AppNavigation() {
-
-  
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -35,6 +34,7 @@ export default function AppNavigation() {
         name="HomeNavigation"
         component={HomeNavigator}
       />
+      <Screen name="PaymentScreen" component={PaymentScreen} />
     </Navigator>
   );
 }

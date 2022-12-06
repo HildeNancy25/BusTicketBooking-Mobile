@@ -3,27 +3,9 @@ import { Picker } from "@react-native-picker/picker";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export default function Home({ navigation }) {
-  const [selectedRoute, setSelectedRoute] = useState();
-  const [selectedDestination, setSelectedDestination] = useState();
-  console.log("Selected Destination", typeof selectedRoute);
-  const [routes, setRoutes] = useState([]);
-  const [destinations, setDestinations] = useState([]);
-
-  const getBusRoutes = async () => {
-    try {
-      const response = await axios({
-        method: "GET",
-        url: "https://busticketbooking.onrender.com/api/routes/",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      setRoutes(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+export default function Home() {
+  const [positions, setPositions] = useState();
+  const [selectedPosition, setSelectedPosition] = useState();
 
   const getDestinations = async () => {
     try {
@@ -35,37 +17,13 @@ export default function Home({ navigation }) {
         },
       });
       console.log(response.data);
-      setDestinations(response.data);
+      setPositions(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleSearchBus = () => {
-    console.log(selectedRoute, selectedDestination);
-    axios({
-      method: "POST",
-      url: "https://busticketbooking.onrender.com/api/buses/activeBuses",
-      data: {
-        routeId: selectedRoute,
-        destinationStationId: selectedDestination,
-      },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        const buses = response.data.data;
-        navigation.navigate("PaymentScreen", { buses });
-      })
-      .catch((error) => {
-        alert("No buses available for selected journey");
-        console.log(error);
-      });
-  };
-
   useEffect(() => {
-    getBusRoutes();
     getDestinations();
   }, []);
 
