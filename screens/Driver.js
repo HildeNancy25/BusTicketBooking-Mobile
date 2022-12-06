@@ -1,7 +1,7 @@
 import { View, Button } from "react-native";
 import { deleteItemAsync } from "expo-secure-store";
 
-export default function Profile({ navigation }) {
+export default function Driver({ navigation }) {
   return (
     <View
       style={{

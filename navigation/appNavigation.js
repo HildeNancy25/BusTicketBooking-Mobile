@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Login from "../screens/Login";
 import Signup from "../screens/Signup";
 import HomeNavigator from "./homeNavigation";
+import DriverNavigation from "./driverNavigation";
 import PaymentScreen from "../screens/PaymentScreen";
 import { useNavigation } from "@react-navigation/native";
 import { getItemAsync } from "expo-secure-store";
@@ -16,7 +17,14 @@ export default function AppNavigation() {
     getItemAsync("token")
       .then((res) => {
         if (res) {
-          navigation.navigate("HomeNavigation");
+          getItemAsync("role").then((role) => {
+            if (role === "driver") {
+              navigation.navigate("DriverNavigation");
+            }
+            if (role === "user") {
+              navigation.navigate("HomeNavigation");
+            }
+          });
         }
       })
       .catch((error) => {
@@ -33,6 +41,13 @@ export default function AppNavigation() {
         }}
         name="HomeNavigation"
         component={HomeNavigator}
+      />
+      <Screen
+        options={{
+          headerShown: false,
+        }}
+        name="DriverNavigation"
+        component={DriverNavigation}
       />
       <Screen name="PaymentScreen" component={PaymentScreen} />
     </Navigator>

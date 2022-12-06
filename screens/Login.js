@@ -22,10 +22,16 @@ export default function Login({ navigation }) {
     })
       .then((response) => {
         setItemAsync("token", response.data.token);
+        setItemAsync("role", response.data.role);
         console.log("response", response.data);
-      })
-      .then(() => {
-        navigation.navigate("HomeNavigation");
+        if (response.data.role === "driver") {
+          console.log("driver");
+          navigation.navigate("DriverNavigation");
+        }
+        if (response.data.role === "user") {
+          console.log("user");
+          navigation.navigate("HomeNavigation");
+        }
       })
       .catch((err) => {
         console.log(err);

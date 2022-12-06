@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "../screens/Home";
-import Tickets from "../screens/Tickets";
-import Profile from "../screens/Profile";
+import BusPosition from "../screens/BusPosition";
+import Passengers from "../screens/Passengers";
+import Driver from "../screens/Driver";
 import { FontAwesome } from "@expo/vector-icons";
 
 const { Navigator, Screen } = createBottomTabNavigator();
@@ -13,11 +13,11 @@ export default function DriverNavigation() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === "Home") {
-            iconName = focused ? "home" : "home";
-          } else if (route.name === "Tickets") {
-            iconName = focused ? "ticket" : "ticket";
-          } else if (route.name === "Profile") {
+          if (route.name === "Position") {
+            iconName = focused ? "bus" : "bus";
+          } else if (route.name === "Passengers") {
+            iconName = focused ? "users" : "users";
+          } else if (route.name === "Driver") {
             iconName = focused ? "user" : "user";
           }
 
@@ -25,9 +25,9 @@ export default function DriverNavigation() {
         },
       })}
     >
-      <Screen name="Home" component={Home} />
-      <Screen name="Tickets" component={Tickets} />
-      <Screen name="Profile" component={Profile} />
+      <Screen name="Position" component={BusPosition} />
+      <Screen name="Passengers" component={Passengers} />
+      <Screen name="Driver" component={Driver} />
     </Navigator>
   );
 }
