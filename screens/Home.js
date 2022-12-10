@@ -1,4 +1,4 @@
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, ActivityIndicator } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -6,7 +6,7 @@ import axios from "axios";
 export default function Home({ navigation }) {
   const [selectedRoute, setSelectedRoute] = useState();
   const [selectedDestination, setSelectedDestination] = useState();
-  console.log("Selected Destination", typeof selectedRoute);
+  const [loading, setLoading] = useState(false);
   const [routes, setRoutes] = useState([]);
   const [destinations, setDestinations] = useState([]);
 
@@ -34,7 +34,6 @@ export default function Home({ navigation }) {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data);
       setDestinations(response.data);
     } catch (error) {
       console.log(error);
@@ -42,7 +41,7 @@ export default function Home({ navigation }) {
   };
 
   const handleSearchBus = () => {
-    console.log(selectedRoute, selectedDestination);
+    setLoading(true);
     axios({
       method: "POST",
       url: "https://busticketbooking.onrender.com/api/buses/activeBuses",
@@ -55,10 +54,14 @@ export default function Home({ navigation }) {
       },
     })
       .then((response) => {
-        const buses = response.data.data;
-        navigation.navigate("PaymentScreen", { buses });
+        setLoading(false);
+        navigation.navigate("PaymentScreen", {
+          routeId: selectedRoute,
+          destinationStationId: selectedDestination,
+        });
       })
       .catch((error) => {
+        setLoading(false);
         alert("No buses available for selected journey");
         console.log(error);
       });
@@ -139,6 +142,15 @@ export default function Home({ navigation }) {
           })}
         </Picker>
       </View>
+      {loading && (
+        <ActivityIndicator
+          size={30}
+          color="blue"
+          style={{
+            marginTop: 20,
+          }}
+        />
+      )}
       <View
         style={{
           marginVertical: 20,
@@ -147,7 +159,7 @@ export default function Home({ navigation }) {
           backgroundColor: "blue",
         }}
       >
-        <Button title="Search for bus" onPress={handleSearchBus} />
+        <Button title="Search for bus" onPress={handleSearchBus}></Button>
       </View>
     </View>
   );

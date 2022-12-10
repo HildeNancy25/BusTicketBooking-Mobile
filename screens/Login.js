@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Button } from "react-native";
+import { View, Text, TextInput, Button, ActivityIndicator } from "react-native";
 import axios from "axios";
 import { useState } from "react";
 import { setItemAsync } from "expo-secure-store";
@@ -6,9 +6,9 @@ import { setItemAsync } from "expo-secure-store";
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const handleLogin = async () => {
-    console.log("email", email);
-    console.log("password", password);
+    setLoading(true);
     axios({
       method: "post",
       url: "https://busticketbooking.onrender.com/api/auth/login",
@@ -21,19 +21,22 @@ export default function Login({ navigation }) {
       },
     })
       .then((response) => {
+        console.log("response", response.data);
+        setLoading(false);
         setItemAsync("token", response.data.token);
         setItemAsync("role", response.data.role);
+        setItemAsync("userInfo", JSON.stringify(response.data.user));
         console.log("response", response.data);
         if (response.data.role === "driver") {
-          console.log("driver");
           navigation.navigate("DriverNavigation");
         }
         if (response.data.role === "user") {
-          console.log("user");
           navigation.navigate("HomeNavigation");
         }
       })
       .catch((err) => {
+        setLoading(false);
+        alert("Invalid email or password");
         console.log(err);
       });
   };
@@ -87,6 +90,15 @@ export default function Login({ navigation }) {
           placeholder="Enter your password"
         />
       </View>
+      {loading && (
+        <ActivityIndicator
+          size={30}
+          color="blue"
+          style={{
+            marginTop: 20,
+          }}
+        />
+      )}
       <View
         style={{
           marginVertical: 20,
