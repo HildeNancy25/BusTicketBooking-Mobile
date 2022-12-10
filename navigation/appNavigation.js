@@ -4,6 +4,7 @@ import Signup from "../screens/Signup";
 import HomeNavigator from "./homeNavigation";
 import DriverNavigation from "./driverNavigation";
 import PaymentScreen from "../screens/PaymentScreen";
+import PurchaseHistory from "../screens/PurchaseHistory";
 import { useNavigation } from "@react-navigation/native";
 import { getItemAsync } from "expo-secure-store";
 import { useEffect } from "react";
@@ -50,6 +51,7 @@ export default function AppNavigation() {
         component={DriverNavigation}
       />
       <Screen name="PaymentScreen" component={PaymentScreen} />
+      <Screen name="PurchaseHistory" component={PurchaseHistory} />
     </Navigator>
   );
 }
