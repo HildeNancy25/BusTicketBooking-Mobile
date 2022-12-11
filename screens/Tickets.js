@@ -52,6 +52,26 @@ export default function Tickets() {
           }}
         />
       )}
+      {tickets?.length === 0 && (
+        <View
+          style={{
+            margin: 20,
+            padding: 15,
+            elevation: 5,
+            backgroundColor: "white",
+            borderRadius: 10,
+          }}
+        >
+          <Text
+            style={{
+              fontWeight: "bold",
+              textAlign: "center",
+            }}
+          >
+            You have no tickets
+          </Text>
+        </View>
+      )}
       {tickets?.map((ticket) => (
         <View
           style={{

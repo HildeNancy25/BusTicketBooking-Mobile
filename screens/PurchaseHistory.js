@@ -15,9 +15,9 @@ export default function PurchaseHistory() {
   }, []);
 
   const getPurchaseHistory = async () => {
+    setLoading(true);
     await getItemAsync("userInfo")
       .then((userInfo) => {
-        setLoading(true);
         axios({
           method: "GET",
           url: `https://busticketbooking.onrender.com/api/tickets/purchaseHistory/${
@@ -51,6 +51,26 @@ export default function PurchaseHistory() {
             marginTop: 20,
           }}
         />
+      )}
+      {purchaseHistory?.length === 0 && (
+        <View
+          style={{
+            margin: 20,
+            padding: 15,
+            elevation: 5,
+            backgroundColor: "white",
+            borderRadius: 10,
+          }}
+        >
+          <Text
+            style={{
+              fontWeight: "bold",
+              textAlign: "center",
+            }}
+          >
+            No purchase history
+          </Text>
+        </View>
       )}
       {purchaseHistory?.map((item) => (
         <View
