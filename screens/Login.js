@@ -33,6 +33,9 @@ export default function Login({ navigation }) {
         if (response.data.role === "user") {
           navigation.navigate("HomeNavigation");
         }
+        if (response.data.role === "admin") {
+          navigation.navigate("AdminNavigation");
+        }
       })
       .catch((err) => {
         setLoading(false);

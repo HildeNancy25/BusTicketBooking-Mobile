@@ -3,8 +3,14 @@ import Login from "../screens/Login";
 import Signup from "../screens/Signup";
 import HomeNavigator from "./homeNavigation";
 import DriverNavigation from "./driverNavigation";
+import AdminNavigation from "./adminNavigation";
 import PaymentScreen from "../screens/PaymentScreen";
 import PurchaseHistory from "../screens/PurchaseHistory";
+import RegisterRoute from "../screens/RegisterRoute";
+import RegisterBus from "../screens/RegisterBus";
+import RegisterBusStation from "../screens/RegisterBusStation";
+import RegisterDriver from "../screens/RegisterDriver";
+import ViewDrivers from "../screens/ViewDrivers";
 import { useNavigation } from "@react-navigation/native";
 import { getItemAsync } from "expo-secure-store";
 import { useEffect } from "react";
@@ -24,6 +30,9 @@ export default function AppNavigation() {
             }
             if (role === "user") {
               navigation.navigate("HomeNavigation");
+            }
+            if (role === "admin") {
+              navigation.navigate("AdminNavigation");
             }
           });
         }
@@ -50,8 +59,20 @@ export default function AppNavigation() {
         name="DriverNavigation"
         component={DriverNavigation}
       />
+      <Screen
+        options={{
+          headerShown: false,
+        }}
+        name="AdminNavigation"
+        component={AdminNavigation}
+      />
       <Screen name="PaymentScreen" component={PaymentScreen} />
       <Screen name="PurchaseHistory" component={PurchaseHistory} />
+      <Screen name="Register route" component={RegisterRoute} />
+      <Screen name="Register bus" component={RegisterBus} />
+      <Screen name="Register bus station" component={RegisterBusStation} />
+      <Screen name="Register driver" component={RegisterDriver} />
+      <Screen name="View drivers" component={ViewDrivers} />
     </Navigator>
   );
 }

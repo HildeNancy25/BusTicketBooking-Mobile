@@ -6,36 +6,59 @@ import {
   ScrollView,
   ActivityIndicator,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { setItemAsync } from "expo-secure-store";
 
-export default function Signup({ navigation }) {
+export default function RegisterDriver({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [busId, setBusId] = useState("");
+  const [gender, setGender] = useState("Male");
+  const [buses, setBuses] = useState();
   const [loading, setLoading] = useState(false);
-  const handleSignUp = () => {
+
+  useEffect(() => {
+    getBuses();
+  }, []);
+
+  const getBuses = () => {
+    axios({
+      method: "GET",
+      url: "https://busticketbooking.onrender.com/api/buses/",
+    })
+      .then((response) => {
+        setBuses(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleRegisterDriver = () => {
     setLoading(true);
     axios({
       method: "POST",
-      url: "https://busticketbooking.onrender.com/api/auth/register",
+      url: "https://busticketbooking.onrender.com/api/drivers/addDriver",
       data: {
-        email: email.toLowerCase(),
         name: fullName,
-        contact: phoneNumber,
+        email: email.toLowerCase(),
         password: password,
+        busId,
+        gender,
       },
     })
       .then((response) => {
         setLoading(false);
         console.log(response.data);
-        setItemAsync("token", response.data.token);
-        navigation.navigate("HomeNavigation");
+        alert("Driver registered successfuly");
+        navigation.navigate("Driver Actions");
       })
       .catch((err) => {
         setLoading(false);
+        alert("Registering driver failed, Try again");
         console.log(err);
       });
   };
@@ -45,7 +68,7 @@ export default function Signup({ navigation }) {
       <View
         style={{
           paddingHorizontal: 20,
-          paddingTop: 50,
+          paddingTop: 10,
         }}
       >
         <Text
@@ -58,13 +81,13 @@ export default function Signup({ navigation }) {
         </Text>
         <TextInput
           style={{
-            height: 40,
+            height: 50,
             borderColor: "gray",
             borderWidth: 1,
             marginVertical: 10,
             paddingLeft: 10,
           }}
-          placeholder="Enter your email"
+          placeholder="Enter driver's full name"
           value={fullName}
           onChangeText={(text) => setFullName(text)}
         />
@@ -78,13 +101,13 @@ export default function Signup({ navigation }) {
         </Text>
         <TextInput
           style={{
-            height: 40,
+            height: 50,
             borderColor: "gray",
             borderWidth: 1,
             marginVertical: 10,
             paddingLeft: 10,
           }}
-          placeholder="Enter your password"
+          placeholder="Enter driver's email"
           value={email}
           onChangeText={(text) => setEmail(text)}
         />
@@ -94,20 +117,55 @@ export default function Signup({ navigation }) {
             fontWeight: "bold",
           }}
         >
-          Phone number
+          Gender
         </Text>
-        <TextInput
+        <View
           style={{
-            height: 40,
-            borderColor: "gray",
+            borderStyle: "solid",
             borderWidth: 1,
+            borderColor: "gray",
             marginVertical: 10,
-            paddingLeft: 10,
           }}
-          placeholder="Enter your password"
-          value={phoneNumber}
-          onChangeText={(text) => setPhoneNumber(text)}
-        />
+        >
+          <Picker
+            selectedValue={gender}
+            onValueChange={(itemValue) => setGender(itemValue)}
+          >
+            <Picker.Item key={1} label="Male" value="Male" />
+            <Picker.Item key={2} label="Female" value="Female" />
+          </Picker>
+        </View>
+        <Text
+          style={{
+            fontSize: 17,
+            fontWeight: "bold",
+          }}
+        >
+          Bus
+        </Text>
+        <View
+          style={{
+            borderStyle: "solid",
+            borderWidth: 1,
+            borderColor: "gray",
+            marginVertical: 10,
+          }}
+        >
+          <Picker
+            selectedValue={busId}
+            onValueChange={(itemValue) => setBusId(itemValue)}
+          >
+            {buses?.map((item) => {
+              return (
+                <Picker.Item
+                  key={item._id}
+                  label={`${item.name} - ${item.company}`}
+                  value={item._id}
+                />
+              );
+            })}
+          </Picker>
+        </View>
         <Text
           style={{
             fontSize: 17,
@@ -118,13 +176,13 @@ export default function Signup({ navigation }) {
         </Text>
         <TextInput
           style={{
-            height: 40,
+            height: 50,
             borderColor: "gray",
             borderWidth: 1,
             marginVertical: 10,
             paddingLeft: 10,
           }}
-          placeholder="Enter your password"
+          placeholder="Enter driver's password"
           value={password}
           onChangeText={(text) => setPassword(text)}
           secureTextEntry={true}
@@ -147,18 +205,8 @@ export default function Signup({ navigation }) {
           backgroundColor: "blue",
         }}
       >
-        <Button title="Signup" onPress={handleSignUp} />
+        <Button title="Register driver" onPress={handleRegisterDriver} />
       </View>
-
-      <Text
-        style={{
-          alignSelf: "center",
-          color: "blue",
-        }}
-        onPress={() => navigation.navigate("Login")}
-      >
-        Already have an account? Login
-      </Text>
     </ScrollView>
   );
 }

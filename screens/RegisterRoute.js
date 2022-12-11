@@ -10,32 +10,31 @@ import { useState } from "react";
 import axios from "axios";
 import { setItemAsync } from "expo-secure-store";
 
-export default function Signup({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+export default function RegisterRoute({ navigation }) {
+  const [busStation1, setBusStation1] = useState("");
+  const [busStation2, setBusStation2] = useState("");
+  const [routeNumber, setRouteNumber] = useState("");
   const [loading, setLoading] = useState(false);
-  const handleSignUp = () => {
+  const handleAddRoute = () => {
     setLoading(true);
     axios({
       method: "POST",
-      url: "https://busticketbooking.onrender.com/api/auth/register",
+      url: "https://busticketbooking.onrender.com/api/routes/addRoute",
       data: {
-        email: email.toLowerCase(),
-        name: fullName,
-        contact: phoneNumber,
-        password: password,
+        busStation1,
+        busStation2,
+        routeNumber,
       },
     })
       .then((response) => {
         setLoading(false);
         console.log(response.data);
-        setItemAsync("token", response.data.token);
-        navigation.navigate("HomeNavigation");
+        alert("Route created successfuly");
+        navigation.navigate("Bus Actions");
       })
       .catch((err) => {
         setLoading(false);
+        alert("Creating route failed, Try again");
         console.log(err);
       });
   };
@@ -54,7 +53,7 @@ export default function Signup({ navigation }) {
             fontWeight: "bold",
           }}
         >
-          Full name
+          Bus station 1
         </Text>
         <TextInput
           style={{
@@ -65,8 +64,8 @@ export default function Signup({ navigation }) {
             paddingLeft: 10,
           }}
           placeholder="Enter your email"
-          value={fullName}
-          onChangeText={(text) => setFullName(text)}
+          value={busStation1}
+          onChangeText={(text) => setBusStation1(text)}
         />
         <Text
           style={{
@@ -74,7 +73,7 @@ export default function Signup({ navigation }) {
             fontWeight: "bold",
           }}
         >
-          Email
+          Bus station 2
         </Text>
         <TextInput
           style={{
@@ -84,9 +83,9 @@ export default function Signup({ navigation }) {
             marginVertical: 10,
             paddingLeft: 10,
           }}
-          placeholder="Enter your password"
-          value={email}
-          onChangeText={(text) => setEmail(text)}
+          placeholder="Enter the second station"
+          value={busStation2}
+          onChangeText={(text) => setBusStation2(text)}
         />
         <Text
           style={{
@@ -94,7 +93,7 @@ export default function Signup({ navigation }) {
             fontWeight: "bold",
           }}
         >
-          Phone number
+          Route number
         </Text>
         <TextInput
           style={{
@@ -104,30 +103,9 @@ export default function Signup({ navigation }) {
             marginVertical: 10,
             paddingLeft: 10,
           }}
-          placeholder="Enter your password"
-          value={phoneNumber}
-          onChangeText={(text) => setPhoneNumber(text)}
-        />
-        <Text
-          style={{
-            fontSize: 17,
-            fontWeight: "bold",
-          }}
-        >
-          Password
-        </Text>
-        <TextInput
-          style={{
-            height: 40,
-            borderColor: "gray",
-            borderWidth: 1,
-            marginVertical: 10,
-            paddingLeft: 10,
-          }}
-          placeholder="Enter your password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          secureTextEntry={true}
+          placeholder="Enter the route number"
+          value={routeNumber}
+          onChangeText={(text) => setRouteNumber(text)}
         />
       </View>
       {loading && (
@@ -147,18 +125,8 @@ export default function Signup({ navigation }) {
           backgroundColor: "blue",
         }}
       >
-        <Button title="Signup" onPress={handleSignUp} />
+        <Button title="Add Route" onPress={handleAddRoute} />
       </View>
-
-      <Text
-        style={{
-          alignSelf: "center",
-          color: "blue",
-        }}
-        onPress={() => navigation.navigate("Login")}
-      >
-        Already have an account? Login
-      </Text>
     </ScrollView>
   );
 }
