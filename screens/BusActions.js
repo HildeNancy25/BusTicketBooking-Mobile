@@ -48,6 +48,16 @@ const BusActions = ({ navigation }) => {
           onPress={() => navigation.navigate("Register bus station")}
         />
       </View>
+      <View
+        style={{
+          marginBottom: 20,
+        }}
+      >
+        <Button
+          title="View all buses"
+          onPress={() => navigation.navigate("View buses")}
+        />
+      </View>
     </ScrollView>
   );
 };

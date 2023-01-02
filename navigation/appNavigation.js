@@ -11,6 +11,7 @@ import RegisterBus from "../screens/RegisterBus";
 import RegisterBusStation from "../screens/RegisterBusStation";
 import RegisterDriver from "../screens/RegisterDriver";
 import ViewDrivers from "../screens/ViewDrivers";
+import ViewBuses from "../screens/ViewBuses";
 import { useNavigation } from "@react-navigation/native";
 import { getItemAsync } from "expo-secure-store";
 import { useEffect } from "react";
@@ -73,6 +74,7 @@ export default function AppNavigation() {
       <Screen name="Register bus station" component={RegisterBusStation} />
       <Screen name="Register driver" component={RegisterDriver} />
       <Screen name="View drivers" component={ViewDrivers} />
+      <Screen name="View buses" component={ViewBuses} />
     </Navigator>
   );
 }
