@@ -58,7 +58,7 @@ export default function PaymentScreen(props) {
       .then((response) => {
         setLoading(false);
         alert(response.data.message);
-        props.navigation.navigate("Tickets");
+        props.navigation.navigate("Home");
       })
       .catch((error) => {
         setLoading(false);

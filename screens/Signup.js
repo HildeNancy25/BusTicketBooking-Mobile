@@ -32,6 +32,8 @@ export default function Signup({ navigation }) {
         setLoading(false);
         console.log(response.data);
         setItemAsync("token", response.data.token);
+        setItemAsync("role", response.data.role);
+        setItemAsync("userInfo", JSON.stringify(response.data.user));
         navigation.navigate("HomeNavigation");
       })
       .catch((err) => {
