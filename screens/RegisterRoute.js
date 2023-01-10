@@ -63,7 +63,7 @@ export default function RegisterRoute({ navigation }) {
             marginVertical: 10,
             paddingLeft: 10,
           }}
-          placeholder="Enter your email"
+          placeholder="Enter the bus station 1"
           value={busStation1}
           onChangeText={(text) => setBusStation1(text)}
         />
@@ -83,7 +83,7 @@ export default function RegisterRoute({ navigation }) {
             marginVertical: 10,
             paddingLeft: 10,
           }}
-          placeholder="Enter the second station"
+          placeholder="Enter the second bus station"
           value={busStation2}
           onChangeText={(text) => setBusStation2(text)}
         />

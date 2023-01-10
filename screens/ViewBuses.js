@@ -21,10 +21,11 @@ const ViewBuses = () => {
     console.log(id);
     axios({
       method: "DELETE",
-      url: `https://busticketbooking.onrender.com/api/buses/${id}}`,
+      url: `https://busticketbooking.onrender.com/api/buses/${id}`,
     })
       .then(() => {
         setLoading(false);
+        alert("Bus removed");
         getBuses();
       })
       .catch((err) => {
@@ -75,7 +76,7 @@ const ViewBuses = () => {
           >
             <Text>Number Plate:{item.name}</Text>
             <Text>Company: {item.company}</Text>
-            <Text>Fare price: {item.fare}</Text>
+            <Text>Fare price: {item.fare} RWF</Text>
             <Button title="Remove" onPress={() => deleteBus(item._id)} />
           </View>
         );

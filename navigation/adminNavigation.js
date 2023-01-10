@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import BusActions from "../screens/BusActions";
 import DriverActions from "../screens/DriverActions";
+import Dashboard from "../screens/Dashboard";
 import BusPosition from "../screens/BusPosition";
 import Passengers from "../screens/Passengers";
 import Driver from "../screens/Driver";
@@ -15,7 +16,9 @@ export default function AdminNavigation() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === "Bus Actions") {
+          if (route.name === "Dashboard") {
+            iconName = focused ? "dashboard" : "dashboard";
+          } else if (route.name === "Bus Actions") {
             iconName = focused ? "bus" : "bus";
           } else if (route.name === "Driver Actions") {
             iconName = focused ? "users" : "users";
@@ -27,6 +30,7 @@ export default function AdminNavigation() {
         },
       })}
     >
+      <Screen name="Dashboard" component={Dashboard} />
       <Screen name="Bus Actions" component={BusActions} />
       <Screen name="Driver Actions" component={DriverActions} />
       <Screen name="Admin" component={Driver} />
